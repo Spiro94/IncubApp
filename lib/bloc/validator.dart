@@ -2,7 +2,7 @@ import 'dart:async';
 
 class Validator {
   static String _correoValidar;
-//TODO: Mejorar validación de nombres y apeliidos
+//TODO: Enhance names and surnames validation
   final nombresValidator = StreamTransformer<String, String>.fromHandlers(
     handleData: (nombre, sink) {
       if (nombre.length > 0) {

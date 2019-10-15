@@ -9,8 +9,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider(
       child: MaterialApp(
-        title: 'Material App',
-        initialRoute: 'home',
+        title: 'IncubApp',
+        initialRoute: 'signup',
         routes: obtenerRutas(),
         theme: ThemeData(
           primaryColor: Colors.orangeAccent,

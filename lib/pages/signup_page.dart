@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:incubapp/bloc/bloc.dart';
 import 'package:incubapp/bloc/providers.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key key}) : super(key: key);
-
+class SignupPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignupPageState createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
   bool _hidePassword = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,11 +21,13 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-      body: _crearFormularioLogin(context),
+      body: Center(
+        child: _crearFormularioReg(context),
+      ),
     );
   }
 
-  Widget _crearFormularioLogin(BuildContext context) {
+  Widget _crearFormularioReg(BuildContext context) {
     final bloc = Provider.of(context);
     return SingleChildScrollView(
       child: Container(
@@ -40,12 +41,15 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 10.0,
             ),
+            _crearNombres(bloc),
+            _crearApellidos(bloc),
             _crearCorreoElectronico(bloc),
+            _crearConfirmacionCorreoElectronico(bloc),
             _crearPassword(bloc),
             SizedBox(
               height: 30.0,
             ),
-            _crearBotonLogin(bloc, context),
+            _crearBotonRegistrarse(bloc, context),
             SizedBox(
               height: 25.0,
             ),
@@ -69,21 +73,52 @@ class _LoginPageState extends State<LoginPage> {
 
   Text _crearLabelReg() {
     return Text(
-      'Inicia sesión',
+      'Regístrate',
       style: TextStyle(
-        color: Colors.orangeAccent,
-        fontWeight: FontWeight.bold,
-        fontSize: 20.0,
-      ),
+          color: Colors.orangeAccent,
+          fontWeight: FontWeight.bold,
+          fontSize: 20.0),
+    );
+  }
+
+  Widget _crearNombres(SignupBloc bloc) {
+    return StreamBuilder<String>(
+      stream: bloc.nombres,
+      builder: (context, snapshot) {
+        return TextField(
+          onChanged: bloc.nombresChanged,
+          decoration: InputDecoration(
+            hintText: 'Nombres',
+            contentPadding: new EdgeInsets.symmetric(vertical: 15.0),
+            errorText: snapshot.error,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _crearApellidos(SignupBloc bloc) {
+    return StreamBuilder<String>(
+      stream: bloc.apellidos,
+      builder: (context, snapshot) {
+        return TextField(
+          onChanged: bloc.apellidosChanged,
+          decoration: InputDecoration(
+            hintText: 'Apellidos',
+            contentPadding: new EdgeInsets.symmetric(vertical: 15.0),
+            errorText: snapshot.error,
+          ),
+        );
+      },
     );
   }
 
   Widget _crearCorreoElectronico(SignupBloc bloc) {
     return StreamBuilder<String>(
-      stream: bloc.correoLogin,
+      stream: bloc.correo,
       builder: (context, snapshot) {
         return TextField(
-          onChanged: bloc.correoLoginChanged,
+          onChanged: bloc.correoChanged,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             hintText: 'Correo electrónico',
@@ -95,12 +130,27 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _crearConfirmacionCorreoElectronico(SignupBloc bloc) {
+    return StreamBuilder<String>(
+        stream: bloc.correoConf,
+        builder: (context, snapshot) {
+          return TextField(
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+                hintText: 'Confirma tu correo electrónico',
+                contentPadding: new EdgeInsets.symmetric(vertical: 15.0),
+                errorText: snapshot.error),
+            onChanged: bloc.correoConfChanged,
+          );
+        });
+  }
+
   Widget _crearPassword(SignupBloc bloc) {
     return StreamBuilder<String>(
-      stream: bloc.passwordLogin,
+      stream: bloc.password,
       builder: (context, snapshot) {
         return TextField(
-          onChanged: bloc.passwordLoginChanged,
+          onChanged: bloc.passwordChanged,
           obscureText: _hidePassword,
           decoration: InputDecoration(
             hintText: 'Contraseña',
@@ -121,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _crearBotonLogin(SignupBloc bloc, BuildContext context) {
+  Widget _crearBotonRegistrarse(SignupBloc bloc, BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: 50.0,
@@ -134,14 +184,14 @@ class _LoginPageState extends State<LoginPage> {
         color: Colors.orangeAccent,
         textColor: Colors.white,
         onPressed: () {
-          _iniciarSesion(bloc, context);
+          _registrar(bloc, context);
         },
       ),
     );
   }
 
   Widget _crearLabelReg2() {
-    return Text('Inicia sesión con:');
+    return Text('También regístrate con:');
   }
 
   Widget _crearButonesRegExt() {
@@ -164,14 +214,14 @@ class _LoginPageState extends State<LoginPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text('¿Nuevo usuario? '),
+        Text('¿Ya tienes una cuenta? '),
         GestureDetector(
           onTap: () {
-            Navigator.pushReplacementNamed(context, 'signup');
+            Navigator.pushReplacementNamed(context, 'login');
           },
           child: Container(
             child: Text(
-              'Regístrate',
+              'Inicia sesión',
               style: TextStyle(
                 decoration: TextDecoration.underline,
                 color: Colors.blue,
@@ -183,5 +233,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _iniciarSesion(bloc, BuildContext context) {}
+  void _registrar(SignupBloc bloc, BuildContext context) {
+    print('=====================');
+    print(bloc.obtenerNombre);
+    print(bloc.obtenerApellidos);
+    print('=====================');
+
+    //Navigator.pushNamed(context, 'home1');
+  }
 }

@@ -16,15 +16,15 @@ class Provider extends InheritedWidget {
     return _instancia;
   }
 
-  final loginBloc = new LoginBloc();
+  final signupBloc = new SignupBloc();
 
   Provider._internal({Key key, Widget child}) : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
-  static LoginBloc of(BuildContext context) {
+  static SignupBloc of(BuildContext context) {
     return (context.inheritFromWidgetOfExactType(Provider) as Provider)
-        .loginBloc;
+        .signupBloc;
   }
 }
